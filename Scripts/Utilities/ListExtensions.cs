@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Assets.Common.Scripts.Utilities
+namespace BumpySellotape.Core.Utilities
 {
     public static class ListExtensions
     {

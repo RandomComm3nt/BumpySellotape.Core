@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.Common.Scripts.Data.Characters
+namespace BumpySellotape.Core.Traits.Model
 {
     [Serializable]
     public class TraitStatModifier

@@ -1,5 +1,4 @@
-﻿using Assets.Common.Scripts.Data.Characters;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 using Sirenix.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +6,7 @@ using UnityEngine;
 namespace BumpySellotape.Core.Traits.Model
 {
     [CreateAssetMenu(menuName = "Common/Trait")]
-    public class Trait : SerializedScriptableObject
+    public class TraitType : SerializedScriptableObject
     {
         //[SerializeField] private TraitValueType traitValueType = TraitValueType.Flag;
         [field: SerializeField] public bool Hidden { get; private set; } = false;

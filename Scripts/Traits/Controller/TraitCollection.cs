@@ -1,45 +1,58 @@
-﻿namespace BumpySellotape.Common.Traits.Model
+﻿using BumpySellotape.Core.Stats.Controller;
+using BumpySellotape.Core.Stats.Model;
+using BumpySellotape.Core.Traits.Model;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace BumpySellotape.Core.Traits.Controller
 {
-    public class TraitCollection
+    public class TraitCollection : IStatModifyingSystem
     {
-        /*
-        public delegate void TraitChanged(CharacterTrait trait);
+        public delegate void TraitChanged(Trait trait);
         public event TraitChanged OnTraitAdded;
         public event TraitChanged OnTraitRemoved;
 
-        public List<CharacterTrait> Traits { get; } = new List<CharacterTrait>();
+        public List<Trait> Traits { get; } = new List<Trait>();
 
-        public bool DoesCharacterHaveTrait(TraitBase traitType, out CharacterTrait traitInstance)
+        float IStatModifyingSystem.Priority => throw new System.NotImplementedException();
+
+        public bool GetTrait(TraitType traitType, out Trait trait)
         {
-            traitInstance = Traits.FirstOrDefault(t => ReferenceEquals(t.Trait, traitType) || ReferenceEquals(t.TraitFamily, traitType));
-            return (traitInstance != null);
+            trait = Traits.FirstOrDefault(t => ReferenceEquals(t.TraitType, traitType));
+            return (trait != null);
         }
 
-        public bool AddTrait(Trait traitType, uint stacks = 1)
+        public bool AddTrait(TraitType traitType, uint stacks = 1)
         {
-            if (DoesCharacterHaveTrait(traitType, out _))
+            if (GetTrait(traitType, out _))
                 return false;
-            CharacterTrait trait = new CharacterTrait(traitType);
+            Trait trait = new(traitType);
             Traits.Add(trait);
             OnTraitAdded?.Invoke(trait);
             return true;
         }
 
-        public bool RemoveTrait(Trait traitType, uint stacks = 1)
+        public bool RemoveTrait(TraitType traitType, uint stacks = 1)
         {
-            if (!DoesCharacterHaveTrait(traitType, out CharacterTrait trait))
+            if (!GetTrait(traitType, out Trait trait))
                 return false;
             Traits.Remove(trait);
             OnTraitRemoved?.Invoke(trait);
             return true;
         }
 
-        public List<CharacterTrait> GetTraitsByTargetCharacter(CharacterControllerBase characterController)
+        float IStatModifyingSystem.ModifyStatValue(StatType statType, StatVariable statVariable, float statValue)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /*
+        public List<Trait> GetTraitsByTargetCharacter(CharacterControllerBase characterController)
         {
             return Traits.Where(t => t.TargetCharacterController == characterController).ToList();
         }
 
-        public List<CharacterTrait> GetTraitsByStatType(StatType statType)
+        public List<Trait> GetTraitsByStatType(StatType statType)
         {
             return Traits.Where(t => t.HasModifierForStat(statType)).ToList();
         }
@@ -50,6 +63,5 @@
                 trait.AdvanceTime(minutes);
     //      }
         */
-        }
-
+    }
 }

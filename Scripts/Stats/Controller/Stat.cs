@@ -1,7 +1,8 @@
-﻿using System;
+﻿using BumpySellotape.Core.Stats.Model;
+using System;
 using UnityEngine;
 
-namespace BumpySellotape.Core.Stats.Model
+namespace BumpySellotape.Core.Stats.Controller
 {
     public class Stat
     {

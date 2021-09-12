@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BumpySellotape.Core.Stats.Controller;
+using System;
 using UnityEngine;
 
 namespace BumpySellotape.Core.Stats.Model

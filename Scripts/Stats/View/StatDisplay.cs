@@ -1,4 +1,4 @@
-﻿using BumpySellotape.Core.Stats.Model;
+﻿using BumpySellotape.Core.Stats.Controller;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
