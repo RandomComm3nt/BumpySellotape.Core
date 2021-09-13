@@ -1,6 +1,7 @@
 ﻿using BumpySellotape.Core.Stats.Controller;
 using BumpySellotape.Core.Stats.Model;
 using BumpySellotape.Core.Traits.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -44,6 +45,11 @@ namespace BumpySellotape.Core.Traits.Controller
         float IStatModifyingSystem.ModifyStatValue(StatType statType, StatVariable statVariable, float statValue)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void GenerateFromTemplate(TraitCollectionGenerationData traitCollectionGenerationData)
+        {
+            Traits.AddRange(traitCollectionGenerationData.GenerateTraits());
         }
 
         /*
