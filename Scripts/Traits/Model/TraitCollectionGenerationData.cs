@@ -7,7 +7,7 @@ using UnityEngine;
 namespace BumpySellotape.Core.Traits.Model
 {
     [HideReferenceObjectPicker]
-    public class TraitCollectionGenerationData
+    public class TraitCollectionGenerationData : Generator<TraitCollection>
     {
         [SerializeField] private List<TraitGenerationData> traitGenerationData = new();
 
@@ -18,6 +18,15 @@ namespace BumpySellotape.Core.Traits.Model
                 .Select(t => new Trait(t.traitType))
                 .ToList();
         }
+
+        public override TraitCollection GenerateT()
+        {
+            var tc = new TraitCollection();
+            tc.Traits.AddRange(GenerateTraits());
+            return tc;
+        }
+
+        //public object Generate() => IGenerator < TraitCollection > .Generate();
 
         [HideReferenceObjectPicker]
         private class TraitGenerationData

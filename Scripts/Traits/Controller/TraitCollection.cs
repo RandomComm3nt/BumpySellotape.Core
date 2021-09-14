@@ -1,7 +1,6 @@
 ﻿using BumpySellotape.Core.Stats.Controller;
 using BumpySellotape.Core.Stats.Model;
 using BumpySellotape.Core.Traits.Model;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 

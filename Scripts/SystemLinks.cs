@@ -52,5 +52,10 @@ namespace BumpySellotape.Core
     }
 
     public class SystemLinks : SystemLinks<object>
-    { }
+    {
+        public void RegisterSystem(object generateTraitCollection)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
