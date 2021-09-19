@@ -1,0 +1,18 @@
+.progressBar_overlay {
+    background-color: rgb(243, 19, 77);
+    height: 100%;
+}
+
+.progressBar_background {
+    border-left-color: rgb(103, 10, 10);
+    border-right-color: rgb(103, 10, 10);
+    border-top-color: rgb(103, 10, 10);
+    border-bottom-color: rgb(103, 10, 10);
+    border-left-width: 5px;
+    border-right-width: 5px;
+    border-top-width: 5px;
+    border-bottom-width: 5px;
+    border-radius: 20px;
+    overflow: hidden;
+    flex-grow: 1;
+}

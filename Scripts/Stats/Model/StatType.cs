@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BumpySellotape.Core.Stats.Model
 {
-    [CreateAssetMenu(menuName = "Stats/Stat Type")]
+    [CreateAssetMenu(menuName = "Common/Stats/Stat Type")]
     public class StatType : ScriptableObject
     {
         [SerializeField] private StatDisplayType displayType = StatDisplayType.Hidden;
