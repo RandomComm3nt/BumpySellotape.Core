@@ -1,12 +1,14 @@
-﻿using BumpySellotape.Core.Stats.Controller;
+﻿using BumpySellotape.Core.Messaging;
+using BumpySellotape.Core.Stats.Controller;
 using BumpySellotape.Core.Stats.Model;
 using BumpySellotape.Core.Traits.Model;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace BumpySellotape.Core.Traits.Controller
 {
-    public class TraitCollection : IStatModifyingSystem
+    public class TraitCollection : IStatModifyingSystem, IMessageReceiver
     {
         public delegate void TraitChanged(Trait trait);
         public event TraitChanged OnTraitAdded;
@@ -14,7 +16,7 @@ namespace BumpySellotape.Core.Traits.Controller
 
         public List<Trait> Traits { get; } = new List<Trait>();
 
-        float IStatModifyingSystem.Priority => throw new System.NotImplementedException();
+        float IStatModifyingSystem.Priority => 1f;
 
         public bool GetTrait(TraitType traitType, out Trait trait)
         {
@@ -27,17 +29,29 @@ namespace BumpySellotape.Core.Traits.Controller
             if (GetTrait(traitType, out _))
                 return false;
             Trait trait = new(traitType);
+            trait.OnTraitStacksChanged += OnTraitStacksChanged;
             Traits.Add(trait);
             OnTraitAdded?.Invoke(trait);
             return true;
+        }
+
+        private void OnTraitStacksChanged(Trait trait)
+        {
+            if (trait.Stacks == 0)
+                RemoveTrait(trait);
+        }
+
+        public void RemoveTrait(Trait trait)
+        {
+            Traits.Remove(trait);
+            OnTraitRemoved?.Invoke(trait);
         }
 
         public bool RemoveTrait(TraitType traitType, uint stacks = 1)
         {
             if (!GetTrait(traitType, out Trait trait))
                 return false;
-            Traits.Remove(trait);
-            OnTraitRemoved?.Invoke(trait);
+            RemoveTrait(trait);
             return true;
         }
 
@@ -48,7 +62,18 @@ namespace BumpySellotape.Core.Traits.Controller
 
         public void GenerateFromTemplate(TraitCollectionGenerationData traitCollectionGenerationData)
         {
-            Traits.AddRange(traitCollectionGenerationData.GenerateTraits());
+            traitCollectionGenerationData.GenerateTraits().ForEach(t =>
+            {
+                Traits.Add(t);
+                t.OnTraitStacksChanged += OnTraitStacksChanged;
+                OnTraitAdded?.Invoke(t);
+            });
+        }
+
+        public void SendMessage(Message message)
+        {
+            // duplicate the list first as sendmessage can cause traits to be removed from the collection
+            Traits.ToList().ForEach(t => t.SendMessage(message));
         }
 
         /*
@@ -61,12 +86,6 @@ namespace BumpySellotape.Core.Traits.Controller
         {
             return Traits.Where(t => t.HasModifierForStat(statType)).ToList();
         }
-
-        public void AdvanceTime(int minutes)
-        {/*
-            foreach (var trait in Traits)
-                trait.AdvanceTime(minutes);
-    //      }
         */
     }
 }

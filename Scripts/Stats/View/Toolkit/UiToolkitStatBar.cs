@@ -12,6 +12,7 @@ namespace BumpySellotape.Core.Stats.View.Toolkit
         {
             this.stat = stat;
             AddToClassList("statBar");
+            AddToClassList($"statBar_{stat.StatType.name}");
 
             bar = new();
 

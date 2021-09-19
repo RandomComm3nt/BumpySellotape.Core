@@ -9,15 +9,17 @@ namespace BumpySellotape.Core.Traits.Model
     [CreateAssetMenu(menuName = "Common/Traits/TraitType")]
     public class TraitType : SerializedScriptableObject
     {
-        //[SerializeField] private TraitValueType traitValueType = TraitValueType.Flag;
         [field: SerializeField] public bool Hidden { get; private set; } = false;
         [SerializeField] [HideIf("Hidden")] private string traitName = "";
         [SerializeField] [HideIf("Hidden")] [Multiline(2)] private string description = "";
-        [SerializeField] private List<TraitStatModifier> statModifiers = new List<TraitStatModifier>();
-        //[SerializeField] [ShowIf("traitValueType", TraitValueType.Stack)] private int maxStacks = 100;
+        [SerializeField] private List<TraitStatModifier> statModifiers = new();
+
+        [field: SerializeField] public bool IsStackable { get; }
+        [field: SerializeField, ShowIf(nameof(IsStackable))] public int MaxStacks { get; } = 100;
 
         [field: OnInspectorInit("@TagList.tagDictionaryName = \"Trait Tags\"")]
         [field: SerializeField] public TagList TagList { get; } = new TagList();
+        [field: SerializeField, ListDrawerSettings(CustomAddFunction = "@new StackChangeRule()")] public List<StackChangeRule> StackChangeRules { get; } = new List<StackChangeRule>();
         
         public string TraitName => traitName.IsNullOrWhitespace() ? name : traitName;
         public string Description => description;

@@ -1,10 +1,11 @@
 ﻿using BumpySellotape.Core.Stats.Controller;
+using Sirenix.OdinInspector;
 using System;
 using UnityEngine;
 
 namespace BumpySellotape.Core.Stats.Model
 {
-    [Serializable]
+    [Serializable, HideReferenceObjectPicker]
     public class GeneratedStatTemplate
     {
         [SerializeField] private StatType statType = null;

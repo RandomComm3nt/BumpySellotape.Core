@@ -28,8 +28,7 @@ namespace BumpySellotape.Core.Stats.View.Toolkit
         #region UXML
         public new class UxmlFactory : UxmlFactory<CustomProgressBar, UxmlTraits> { }
         public new class UxmlTraits : VisualElement.UxmlTraits {
-            UxmlFloatAttributeDescription valueAttribute = new UxmlFloatAttributeDescription { name = "value", defaultValue = 100f };
-
+            UxmlFloatAttributeDescription valueAttribute = new() { name = "value", defaultValue = 100f };
 
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
