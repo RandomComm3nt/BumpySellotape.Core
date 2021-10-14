@@ -15,5 +15,10 @@ namespace BumpySellotape.Core.DateAndTime
         public int ToMinutes { get; private set; } = 1440;
 
         private string Label => $"Time: {TimeUtilities.FormatTimeInMinutes24Hour(FromMinutes)} to {TimeUtilities.FormatTimeInMinutes24Hour(ToMinutes)}";
+
+        public bool IsTimeInRange(int minutes)
+        {
+            return minutes >= FromMinutes && minutes <= ToMinutes;
+        }
     }
 }
