@@ -17,6 +17,9 @@ namespace BumpySellotape.Core.Stats.Controller
         public StatType StatType { get; }
 
         public float Value => Mathf.Clamp(baseValue, MinValue, MaxValue);
+        /// <summary>
+        /// In range [0, 100]
+        /// </summary>
         public float ValuePercent => 100 * Value / MaxValue;
         public float MinValue { get; private set; }
         public float MaxValue { get; private set; }

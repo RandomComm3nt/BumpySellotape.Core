@@ -7,7 +7,8 @@ namespace BumpySellotape.Core.Stats.Model
     public class StatType : ScriptableObject
     {
         [SerializeField] private StatDisplayType displayType = StatDisplayType.Hidden;
-        [SerializeField] [HideIf("Hidden")] private string displayName = "";
+        [SerializeField] [HideIf(nameof(Hidden))] private string displayName = "";
+        [field: SerializeField, HideIf(nameof(Hidden))] public string Description { get; private set; } = "";
         [Tooltip("If the stat is dynamic it will always be calculated when required and will not have a stored value")]
         [SerializeField] private bool dynamic = false;
         //[Tooltip("If the stat is targeted it will exist on a per-character basis")]
