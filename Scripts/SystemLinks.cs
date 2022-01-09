@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace BumpySellotape.Core
 {
@@ -15,6 +16,8 @@ namespace BumpySellotape.Core
     {
         [SerializeField, DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.Foldout)] 
         private Dictionary<Type, TBase> systems = new Dictionary<Type, TBase>();
+
+        public List<TBase> Systems => systems.Values.ToList();
 
         public T GetSystemSafe<T>() where T : class
         {
@@ -49,8 +52,21 @@ namespace BumpySellotape.Core
         {
             systems[system.GetType()] = system;
         }
+
+        public void RegisterSystem(Type t, TBase system)
+        {
+            Assert.IsTrue(t.IsAssignableFrom(system.GetType()));
+            systems[t] = system;
+        }
+
+        public void CopyFrom(SystemLinks<TBase> systemLinks)
+        {
+            foreach (var s in systemLinks.systems)
+                RegisterSystem(s.Key, s.Value);
+        }
     }
 
     public class SystemLinks : SystemLinks<object>
-    { }
+    {
+    }
 }
