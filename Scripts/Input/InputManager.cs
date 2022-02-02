@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace BumpySellotape.Core.Input
 {
@@ -16,6 +17,8 @@ namespace BumpySellotape.Core.Input
             var handler = currentHandler.AddComponent<THandler>();
             handler.Initialise(controller);
             currentHandler.transform.SetParent(transform);
+            GetComponent<PlayerInput>().SwitchCurrentActionMap(handler.ActionMap);
+
             return handler;
         }
     }
