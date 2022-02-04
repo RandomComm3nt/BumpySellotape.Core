@@ -16,9 +16,9 @@ namespace BumpySellotape.Core.Stats.Model
 
         public float RollValue() => UnityEngine.Random.Range(valueRange.x, valueRange.y);
 
-        public Stat Generate()
+        public Stat Generate(StatCollection statCollection)
         {
-            var s = new Stat(statType);
+            var s = new Stat(statType, statCollection);
             float value = RollValue();
             s.SetVariable(value, StatVariable.Value);
             //if (statType.DriftType != DriftType.NoDrift)

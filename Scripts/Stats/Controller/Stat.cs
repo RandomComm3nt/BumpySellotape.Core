@@ -6,7 +6,18 @@ namespace BumpySellotape.Core.Stats.Controller
 {
     public class Stat
     {
-        private float baseValue;
+        /// <summary>
+        /// The value of the stat before clamping or modifiers are applied
+        /// </summary>
+        public float RawValue { get; private set; }
+        /// <summary>
+    /// The min value of the stat before modifiers are applied
+    /// </summary>
+        public float RawMinValue { get; private set; }
+        /// <summary>
+        /// The max value of the stat before modifiers are applied
+        /// </summary>
+        public float RawMaxValue { get; private set; }
 
         //private DriftType driftType = DriftType.NoDrift;
         //private float driftTarget;
@@ -15,30 +26,42 @@ namespace BumpySellotape.Core.Stats.Controller
         private float lossMultiplier = 1f;
 
         public StatType StatType { get; }
+        public StatCollection StatCollection { get; }
 
-        public float Value => Mathf.Clamp(baseValue, MinValue, MaxValue);
         /// <summary>
-        /// In range [0, 100]
+        /// The value with modifiers, but without taking into account the min or the max value
+        /// </summary>
+        public float UnclampedValue => StatCollection.ModifyStatValue(StatType, StatVariable.Value, RawValue);
+        /// <summary>
+        /// The min value including modifiers
+        /// </summary>
+        public float MinValue => StatCollection.ModifyStatValue(StatType, StatVariable.MinValue, RawMinValue);
+        /// <summary>
+        /// The max value including modifiers
+        /// </summary>
+        public float MaxValue => StatCollection.ModifyStatValue(StatType, StatVariable.MaxValue, RawMaxValue);
+        /// <summary>
+        /// The effective value of the stat with modifiers and min/max restrictions applied
+        /// </summary>
+        public float Value => Mathf.Clamp(UnclampedValue, MinValue, MaxValue);
+        /// <summary>
+        /// Value as a percentage of MaxValue, in range [0, 100]
         /// </summary>
         public float ValuePercent => 100 * Value / MaxValue;
-        public float MinValue { get; private set; }
-        public float MaxValue { get; private set; }
         //public float DriftTarget => ModifyValue(driftTarget, StatVariable.DriftTarget);
         //private float DriftRatePerDay => ModifyValue(baseDriftRatePerDay, StatVariable.DriftRate);
 
-        [Obsolete]
-        public delegate void ValueChange();
+
         public delegate void ValueChanged(float delta);
-        [Obsolete]
-        public event ValueChange OnValueChange;
         public event ValueChanged OnValueChanged;
 
-        public Stat(StatType statType)
+        public Stat(StatType statType, StatCollection statCollection)
         {
             StatType = statType;
-            baseValue = statType.DefaultValue;
-            MinValue = statType.DefaultMinValue;
-            MaxValue = statType.DefaultMaxValue;
+            StatCollection = statCollection;
+            RawValue = statType.DefaultValue;
+            RawMinValue = statType.DefaultMinValue;
+            RawMaxValue = statType.DefaultMaxValue;
             //driftType = statType.DriftType;
             //baseDriftRatePerDay = statType.DriftRatePerDay;
         }
@@ -46,8 +69,7 @@ namespace BumpySellotape.Core.Stats.Controller
         public void ChangeValue(float delta)
         {
             delta *= (delta > 0 ? gainMultiplier : lossMultiplier);
-            baseValue = Mathf.Clamp(baseValue + delta, MinValue, MaxValue);
-            OnValueChange?.Invoke();
+            RawValue = Mathf.Clamp(RawValue + delta, RawMinValue, RawMaxValue);
             OnValueChanged?.Invoke(delta);
         }
 
@@ -56,13 +78,12 @@ namespace BumpySellotape.Core.Stats.Controller
             switch (statVariable)
             {
                 case StatVariable.Value:
-                    baseValue = Mathf.Clamp(value, MinValue, MaxValue);
+                    RawValue = Mathf.Clamp(value, RawMinValue, RawMaxValue);
                     break;
                 //case StatVariable.DriftTarget:
                 //    driftTarget = value;
                 //    break;
             }
-            OnValueChange?.Invoke();
             OnValueChanged?.Invoke(0f);
         }
 

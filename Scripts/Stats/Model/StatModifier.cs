@@ -9,6 +9,7 @@ namespace BumpySellotape.Core.Stats.Model
         public StatType statType;
         public StatVariable statVariable = StatVariable.Value;
         public float value = 0f;
+        public string source;
 
         public float ModifyValue(float baseValue)
         {

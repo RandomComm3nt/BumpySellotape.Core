@@ -9,8 +9,8 @@ namespace BumpySellotape.Core.Stats.Controller
 {
     public class StatCollection
     {
-        private Dictionary<StatType, Stat> stats = new Dictionary<StatType, Stat>();
-        private List<IStatModifyingSystem> statModifyingSystems = new List<IStatModifyingSystem>();
+        private Dictionary<StatType, Stat> stats = new();
+        private readonly List<IStatModifyingSystem> statModifyingSystems = new();
 
         public List<Stat> AllStats => stats.Values.ToList();
 
@@ -31,7 +31,7 @@ namespace BumpySellotape.Core.Stats.Controller
 
         public void GenerateFromTemplates(List<GeneratedStatTemplate> statTemplates)
         {
-            stats = statTemplates.ToDictionary(t => t.StatType, t => t.Generate());
+            stats = statTemplates.ToDictionary(t => t.StatType, t => t.Generate(this));
             stats.Values.ForEach(s => s.OnValueChanged += StatChanged);
         }
 
@@ -64,14 +64,14 @@ namespace BumpySellotape.Core.Stats.Controller
             {
                 case StatVariable.Value:
                     baseValue = stat?.Value ?? statType.DefaultValue;
-                    baseMinValue = stat?.MinValue ?? statType.DefaultMinValue;
-                    baseMaxValue = stat?.MaxValue ?? statType.DefaultMaxValue;
+                    baseMinValue = stat?.RawMinValue ?? statType.DefaultMinValue;
+                    baseMaxValue = stat?.RawMaxValue ?? statType.DefaultMaxValue;
                     break;
                 case StatVariable.MinValue:
-                    baseValue = stat?.MinValue ?? statType.DefaultMinValue;
+                    baseValue = stat?.RawMinValue ?? statType.DefaultMinValue;
                     break;
                 case StatVariable.MaxValue:
-                    baseValue = stat?.MaxValue ?? statType.DefaultMaxValue;
+                    baseValue = stat?.RawMaxValue ?? statType.DefaultMaxValue;
                     break;
             }
 
@@ -91,6 +91,17 @@ namespace BumpySellotape.Core.Stats.Controller
             }
 
             return baseValue;
+        }
+
+        public float ModifyStatValue(StatType statType, StatVariable statVariable, float value)
+        {
+            var systems = statModifyingSystems.OrderBy(system => system.Priority);
+            var newValue = value;
+            foreach (var s in systems)
+            {
+                newValue = s.ModifyStatValue(statType, statVariable, newValue);
+            }
+            return newValue;
         }
     }
 }

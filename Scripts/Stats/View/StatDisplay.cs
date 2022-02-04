@@ -34,14 +34,14 @@ namespace BumpySellotape.Core.Stats.View
             if (splitTextFields)
             {
                 labelText.text = stat.StatType.DisplayName;
-                valueLabel.text = stat.Value.ToString("##0") + (showMaxValue ? "/" + stat.MaxValue.ToString("##0") : "");
+                valueLabel.text = stat.Value.ToString("##0") + (showMaxValue ? "/" + stat.RawMaxValue.ToString("##0") : "");
             }
             else if (valueLabel)
             {
-                valueLabel.text = stat.Value.ToString("##0") + (showMaxValue ? "/" + stat.MaxValue.ToString("##0") : "");
+                valueLabel.text = stat.Value.ToString("##0") + (showMaxValue ? "/" + stat.RawMaxValue.ToString("##0") : "");
             }
             if (valueStatBar && stat.StatType.DisplayType == Model.StatDisplayType.Bar)
-                valueStatBar.Draw(stat.Value, stat.MaxValue);
+                valueStatBar.Draw(stat.Value, stat.RawMaxValue);
         }
     }
 }
