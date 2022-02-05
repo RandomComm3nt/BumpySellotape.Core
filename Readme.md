@@ -1,0 +1,1 @@
+The decision I have made about what fits in Core is that it should be more about *how* the game is built, rather than *what* is being built. For example, utility functions and reusable components belong here, as does the Event framework. However packages tied to specific mechanics such as Inventory and Quests will be kept separate.
