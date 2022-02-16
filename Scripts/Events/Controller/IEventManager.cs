@@ -11,5 +11,6 @@ namespace BumpySellotape.Events.Controller
         void SetSystemLink(object system);
         void SetSystemLink(Type t, object system);
         void AdvanceFrame();
+        ProcessingContext ProcessEffect(IEffect effect);
     }
 }

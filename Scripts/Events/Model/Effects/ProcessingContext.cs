@@ -15,6 +15,14 @@ namespace BumpySellotape.Events.Model.Effects
 
         public bool isLoggingEnabled = false;
         public List<EventFrame> queuedFrames;
+        /// <summary>
+        /// If set to true, no further effects will be run
+        /// </summary>
+        public bool cancelEvent = false;
+        /// <summary>
+        /// Set to true to notify the event trigger that the action should be cancelled
+        /// </summary>
+        public bool cancelEventTrigger = false;
 
         public bool HasQueuedFrames => queuedFrames?.Count > 0;
 

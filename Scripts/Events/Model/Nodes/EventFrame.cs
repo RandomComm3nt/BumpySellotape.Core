@@ -9,7 +9,7 @@ namespace BumpySellotape.Events.Model.Nodes
     {
         public bool IsEmpty => eventBlocks.Count == 0;
 
-        [SerializeField] [HideReferenceObjectPicker] private List<IEffect> eventBlocks = new List<IEffect>();
+        [SerializeField] [HideReferenceObjectPicker] private List<IEffect> eventBlocks = new();
 
         public void Process(ProcessingContext processingContext)
         {
