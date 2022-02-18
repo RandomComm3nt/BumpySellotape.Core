@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace BumpySellotape.Core.DateAndTime
 {
     [Serializable]
     public class TimeTrackingConfig
     {
-        public bool UsePeriods { get; private set; }
-        public List<TimePeriod> AllowedTimePeriods { get; private set; } = new();
+        [field: SerializeField] public bool UsePeriods { get; private set; }
+        [field: SerializeField] public TimePeriodFlag AllowedTimePeriods { get; private set; }
     }
 }

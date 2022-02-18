@@ -15,15 +15,15 @@ namespace BumpySellotape.Core
     public class SystemLinks<TBase>
     {
         [SerializeField, DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.Foldout)] 
-        private Dictionary<Type, TBase> systems = new Dictionary<Type, TBase>();
+        private Dictionary<Type, TBase> systems = new();
 
         public List<TBase> Systems => systems.Values.ToList();
 
         public T GetSystemSafe<T>() where T : class
         {
             if (!systems.ContainsKey(typeof(T)))
-                throw new Exception($"SystemLinks does not have system of type {typeof(TBase).Name}");
-            if (!(systems[typeof(T)] is T))
+                throw new Exception($"SystemLinks does not have system of type {typeof(T).Name}");
+            if (systems[typeof(T)] is not T)
                 throw new Exception($"SystemLinks has an incorrectly registered system. Expected type: {typeof(TBase).Name}, actual type: {systems[typeof(TBase)].GetType().Name}");
 
             return systems[typeof(T)] as T;
@@ -33,7 +33,7 @@ namespace BumpySellotape.Core
         {
             if (!systems.ContainsKey(typeof(T)))
                 return null;
-            if (!(systems[typeof(T)] is T))
+            if (systems[typeof(T)] is not T)
                 throw new Exception($"SystemLinks has an incorrectly registered system. Expected type: {typeof(TBase).Name}, actual type: {systems[typeof(TBase)].GetType().Name}");
 
             return systems[typeof(T)] as T;

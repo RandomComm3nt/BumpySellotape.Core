@@ -26,5 +26,12 @@ namespace Assets.Common.Scripts.Utilities
 
             return (T)(object)powers.SelectRandomItem();
         }
+
+        public static bool FlagContainsNonFlagValue<T1, T2>(T1 flagEnum, T2 baseEnum)
+            where T1 : Enum 
+            where T2 : Enum
+        {
+            return (Convert.ToInt32(flagEnum) & (2 << Convert.ToInt32(baseEnum))) != 0;
+        }
     }
 }

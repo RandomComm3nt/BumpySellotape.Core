@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Common.Scripts.Utilities;
+using System;
 using System.Collections.Generic;
 
 namespace BumpySellotape.Core.DateAndTime
@@ -10,7 +11,13 @@ namespace BumpySellotape.Core.DateAndTime
 
         public DateAndPeriodTracker(TimeTrackingConfig config) : base(config)
         {
-
+            var values = Enum.GetValues(typeof(TimePeriod));
+            allowedTimePeriods = new();
+            foreach (var o in values)
+            {
+                if (EnumUtils.FlagContainsNonFlagValue(config.AllowedTimePeriods, (TimePeriod)o))
+                    allowedTimePeriods.Add((TimePeriod)o);
+            }
         }
 
         public void AdvanceTimePeriod(int incrementCount, bool allowRollover)
