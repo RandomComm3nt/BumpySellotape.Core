@@ -33,6 +33,11 @@ namespace BumpySellotape.Core.DateAndTime
             SetTimePeriod(allowedTimePeriods[j]);
         }
 
+        public void AdvanceToTimePeriod(TimePeriod advanceToPeriod, bool allowRollover)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetTimePeriod(TimePeriod timePeriod)
         {
             if (!allowedTimePeriods.Contains(timePeriod))
