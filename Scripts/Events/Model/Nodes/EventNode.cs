@@ -9,7 +9,7 @@ namespace BumpySellotape.Events.Model.Nodes
     [CreateAssetMenu(menuName = "Events/Event Node")]
     public class EventNode : SerializedScriptableObject
     {
-        private bool HideEventBlocks => eventFrames != null && eventFrames.Count > 0 && !eventFrames[0].IsEmpty;
+        private bool HideEventBlocks => eventBlocks.Count == 0;
         [SerializeField] [HideReferenceObjectPicker] [HideIf(nameof(HideEventBlocks))] [InfoBox("Deprecated, use frames instead")] private List<IEffect> eventBlocks = new();
         [SerializeField, HideReferenceObjectPicker, ListDrawerSettings(CustomAddFunction = nameof(AddFrame))] private List<EventFrame> eventFrames = new() { new EventFrame() };
 

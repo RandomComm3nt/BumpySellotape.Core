@@ -1,5 +1,7 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Random = UnityEngine.Random;
 
 namespace Assets.Common.Scripts.Utilities
 {
@@ -16,6 +18,14 @@ namespace Assets.Common.Scripts.Utilities
                 newArray[j] = old;
             }
             return newArray;
+        }
+
+        public static IEnumerable<T> Where<T>(this T[,] array, Predicate<T> predicate)
+        {
+            return Enumerable
+                .Range(0, array.GetLength(0))
+                .SelectMany(i => Enumerable.Range(0, array.GetLength(1)).Select(j => array[i, j]))
+                .Where(x => predicate.Invoke(x));
         }
     }
 }

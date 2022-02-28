@@ -20,5 +20,10 @@ namespace BumpySellotape.Events.Controller
         {
             label.text = displayText.Text;
         }
+
+        void IEventTextManager.AppendText(DisplayText displayText)
+        {
+            label.text += displayText.Text;
+        }
     }
 }

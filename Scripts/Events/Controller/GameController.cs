@@ -24,7 +24,7 @@ namespace BumpySellotape.Events.Controller
             LoadScreenWithEvent(rootNode);
         }
 
-        private void LoadScreenWithEvent(EventNode node)
+        protected void LoadScreenWithEvent(EventNode node)
         {
             LoadScreen();
             if (node)

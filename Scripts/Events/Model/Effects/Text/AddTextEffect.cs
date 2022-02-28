@@ -6,13 +6,18 @@ namespace BumpySellotape.Events.Model.Effects.Text
 {
     public class AddTextEffect : IEffect
     {
-        [SerializeField] private DisplayText displayText = new DisplayText();
+        [SerializeField] private DisplayText displayText = new ();
+        [SerializeField] private bool append = false;
 
         public string Label => "Add Text";
 
         public void Process(ProcessingContext processingContext)
         {
-            processingContext.SystemLinks.GetSystemSafe<IEventTextManager>().AddEventText(displayText);
+            IEventTextManager eventTextManager = processingContext.SystemLinks.GetSystemSafe<IEventTextManager>();
+            if (append)
+                eventTextManager.AppendText(displayText);
+            else
+                eventTextManager.AddEventText(displayText);
         }
     }
 }
