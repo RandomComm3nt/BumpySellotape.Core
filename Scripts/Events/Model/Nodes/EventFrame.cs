@@ -5,9 +5,11 @@ using UnityEngine;
 
 namespace BumpySellotape.Events.Model.Nodes
 {
-    public class EventFrame
+    public class EventFrame : IEffect
     {
         public bool IsEmpty => eventBlocks.Count == 0;
+
+        public string Label => $"Frame - {eventBlocks.Count} effects";
 
         [SerializeField] [HideReferenceObjectPicker] private List<IEffect> eventBlocks = new();
 

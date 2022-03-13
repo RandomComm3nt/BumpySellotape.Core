@@ -37,7 +37,7 @@ namespace BumpySellotape.Core.DateAndTime
         {
             if (advanceToPeriod > CurrentTimePeriod && allowRollover)
                 AdvanceDay();
-            CurrentTimePeriod = advanceToPeriod;
+            SetTimePeriod(advanceToPeriod);
         }
 
         public void SetTimePeriod(TimePeriod timePeriod)

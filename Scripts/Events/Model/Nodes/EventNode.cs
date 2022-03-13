@@ -7,9 +7,12 @@ using UnityEngine;
 namespace BumpySellotape.Events.Model.Nodes
 {
     [CreateAssetMenu(menuName = "Events/Event Node")]
-    public class EventNode : SerializedScriptableObject
+    public class EventNode : SerializedScriptableObject, IEffect
     {
         private bool HideEventBlocks => eventBlocks.Count == 0;
+
+        public string Label => name;
+
         [SerializeField] [HideReferenceObjectPicker] [HideIf(nameof(HideEventBlocks))] [InfoBox("Deprecated, use frames instead")] private List<IEffect> eventBlocks = new();
         [SerializeField, HideReferenceObjectPicker, ListDrawerSettings(CustomAddFunction = nameof(AddFrame))] private List<EventFrame> eventFrames = new() { new EventFrame() };
 
