@@ -1,4 +1,5 @@
-﻿using BumpySellotape.Core.Input;
+﻿using BumpySellotape.Core;
+using BumpySellotape.Core.Input;
 using BumpySellotape.Core.Transitions;
 using BumpySellotape.Events.Model.Nodes;
 using BumpySellotape.Events.View;
@@ -16,6 +17,7 @@ namespace BumpySellotape.Events.Controller
         [field: SerializeField, FoldoutGroup("References")] public ScreenManager ScreenManager { get; private set; }
         [field: SerializeField, FoldoutGroup("References")] public InputManager InputManager { get; private set; }
         public IEventManager EventManager { get; protected set; }
+        public SystemLinks SystemLinks { get; private set; } = new();
 
         public void Start()
         {
@@ -28,7 +30,7 @@ namespace BumpySellotape.Events.Controller
         {
             LoadScreen();
             if (node)
-                EventManager.ProcessEventNode(node);
+                EventManager.ProcessEffect(node);
         }
 
         protected virtual void LoadScreen()
@@ -63,7 +65,7 @@ namespace BumpySellotape.Events.Controller
             cutsceneManager.StartCutscene(sceneObject);
             EventManager.SetSystemLink(typeof(IEventTextManager), cutsceneManager.EventTextManager);
             EventManager.SetSystemLink(typeof(IBackgroundRenderer), cutsceneManager);
-            EventManager.ProcessEventNode(sceneEvent);
+            EventManager.ProcessEffect(sceneEvent);
         }
 
         private void Update()

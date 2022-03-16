@@ -8,7 +8,9 @@ namespace BumpySellotape.Core.Events.Model.Effects
     [HideReferenceObjectPicker]
     public class ConditionOption
     {
-        [field: SerializeField] public Condition Condition { get; private set; }
-        [field: SerializeField] public EffectSource Effect { get; private set; } = new();
+        [field: SerializeField, FoldoutGroup("$" + nameof(Label)), HideLabel] public ICondition Condition { get; private set; }
+        [field: SerializeField, FoldoutGroup("$" + nameof(Label)), HideLabel] public EffectSource Effect { get; private set; } = new();
+
+        private string Label => $"IF {Condition.Label} THEN {Effect.Label}";
     }
 }

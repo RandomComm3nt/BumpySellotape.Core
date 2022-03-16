@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace BumpySellotape.Events.Model.Nodes
 {
+    [HideReferenceObjectPicker]
     public class EventFrame : IEffect
     {
         public bool IsEmpty => eventBlocks.Count == 0;

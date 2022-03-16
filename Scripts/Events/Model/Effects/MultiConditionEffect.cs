@@ -16,7 +16,7 @@ namespace BumpySellotape.Core.Events.Model.Effects
         {
             foreach (var o in options)
             {
-                if (o.Condition == null || o.Condition.CheckCondition(null))
+                if (o.Condition == null || o.Condition.Evaluate(processingContext))
                 {
                     o.Effect.Process(processingContext);
                     return;
