@@ -1,6 +1,7 @@
 ﻿using Assets.Common.Scripts.Utilities;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace BumpySellotape.Core.DateAndTime
 {
@@ -22,6 +23,7 @@ namespace BumpySellotape.Core.DateAndTime
 
         public void AdvanceTimePeriod(int incrementCount, bool allowRollover)
         {
+            var periodsIncremented = incrementCount;
             var i = allowedTimePeriods.IndexOf(CurrentTimePeriod);
             var j = i + incrementCount;
             if (j > allowedTimePeriods.Count - 1)
@@ -29,15 +31,34 @@ namespace BumpySellotape.Core.DateAndTime
                 j = allowRollover ? j % allowedTimePeriods.Count : allowedTimePeriods.Count - 1;
                 if (allowRollover)
                     AdvanceDay();
+                else
+                {
+                    periodsIncremented = j - i;
+                }
             }
+            
+            OnIntervalPassed(TimeInterval.Period, periodsIncremented);
             SetTimePeriod(allowedTimePeriods[j]);
         }
 
         public void AdvanceToTimePeriod(TimePeriod advanceToPeriod, bool allowRollover)
         {
-            if (advanceToPeriod > CurrentTimePeriod && allowRollover)
+            var advanceToIndex = allowedTimePeriods.IndexOf(advanceToPeriod);
+            var currentIndex = allowedTimePeriods.IndexOf(CurrentTimePeriod);
+            if (advanceToIndex > currentIndex)
+            {
+                OnIntervalPassed(TimeInterval.Period, advanceToIndex - currentIndex);
+                SetTimePeriod(advanceToPeriod);
+            }
+            else if (allowRollover)
+            {
+                OnIntervalPassed(TimeInterval.Period, currentIndex + allowedTimePeriods.Count - advanceToIndex);
                 AdvanceDay();
-            SetTimePeriod(advanceToPeriod);
+            }
+            else
+            {
+                Debug.Log($"Tried to advance to {advanceToPeriod}, currently {CurrentTimePeriod}, but rollover not allowed");
+            }
         }
 
         public void SetTimePeriod(TimePeriod timePeriod)

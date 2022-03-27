@@ -1,4 +1,5 @@
-﻿using BumpySellotape.Core.Stats.Model;
+﻿using BumpySellotape.Core.DateAndTime;
+using BumpySellotape.Core.Stats.Model;
 using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
@@ -102,6 +103,11 @@ namespace BumpySellotape.Core.Stats.Controller
                 newValue = s.ModifyStatValue(statType, statVariable, newValue);
             }
             return newValue;
+        }
+
+        public void OnTimeIntervalPassed(TimeInterval timeInterval, int intervalCount)
+        {
+            stats.Values.ForEach(s => s.OnTimeIntervalAdvanced(timeInterval, intervalCount));
         }
     }
 }

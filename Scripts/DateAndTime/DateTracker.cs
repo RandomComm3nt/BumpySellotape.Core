@@ -11,6 +11,8 @@ namespace BumpySellotape.Core.DateAndTime
         public DayOfWeek DayOfWeek { get; private set; } = DayOfWeek.Monday;
 
         public event SimpleEventHandler<DateTracker> TimeChanged;
+        public delegate void IntervalPassedDelegate(TimeInterval timeInterval, int intervalCount);
+        public event IntervalPassedDelegate IntervalPassed;
 
         public DateTracker(TimeTrackingConfig config)
         {
@@ -21,11 +23,17 @@ namespace BumpySellotape.Core.DateAndTime
         {
             day++;
             DayOfWeek = (DayOfWeek)(((int)DayOfWeek + 1) % 7);
+            IntervalPassed?.Invoke(TimeInterval.Day, 1);
         }
 
         protected void OnTimeChanged()
         {
             TimeChanged?.Invoke(this);
+        }
+
+        protected void OnIntervalPassed(TimeInterval timeInterval, int intervalCount)
+        {
+            IntervalPassed?.Invoke(timeInterval, intervalCount);
         }
     }
 }

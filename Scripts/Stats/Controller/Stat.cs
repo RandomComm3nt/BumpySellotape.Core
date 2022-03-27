@@ -1,4 +1,5 @@
-﻿using BumpySellotape.Core.Stats.Model;
+﻿using BumpySellotape.Core.DateAndTime;
+using BumpySellotape.Core.Stats.Model;
 using System;
 using UnityEngine;
 
@@ -68,6 +69,7 @@ namespace BumpySellotape.Core.Stats.Controller
 
         public void ChangeValue(float delta)
         {
+            Debug.Log($"stat {StatType.name} changed by {delta}");
             delta *= (delta > 0 ? gainMultiplier : lossMultiplier);
             RawValue = Mathf.Clamp(RawValue + delta, RawMinValue, RawMaxValue);
             OnValueChanged?.Invoke(delta);
@@ -85,6 +87,17 @@ namespace BumpySellotape.Core.Stats.Controller
                 //    break;
             }
             OnValueChanged?.Invoke(0f);
+        }
+
+        internal void OnTimeIntervalAdvanced(TimeInterval timeInterval, int intervalCount)
+        {
+            foreach (var scr in StatType.StatChangeRelationships)
+            {
+                if (scr.TimeInterval == timeInterval)
+                {
+                    ChangeValue(StatCollection.GetStatSafe(scr.DeltaStat).Value * intervalCount);
+                }
+            }
         }
 
         /*

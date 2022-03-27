@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BumpySellotape.Core.Stats.Model
@@ -25,6 +26,7 @@ namespace BumpySellotape.Core.Stats.Model
         [field: SerializeField] public float DefaultMaxValue { get; private set; } = 100f;
         [field: SerializeField] public float HardMinValue { get; private set; } = 0f;
         [field: SerializeField] public float HardMaxValue { get; private set; } = 100f;
+        [field: SerializeField] public List<StatChangeRelationship> StatChangeRelationships { get; private set; } = new ();
 
         public StatDisplayType DisplayType => displayType;
         public bool Hidden => displayType == StatDisplayType.Hidden;
