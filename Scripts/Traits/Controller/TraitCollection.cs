@@ -2,6 +2,7 @@
 using BumpySellotape.Core.Stats.Controller;
 using BumpySellotape.Core.Stats.Model;
 using BumpySellotape.Core.Traits.Model;
+using BumpySellotape.Events.Model.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -24,15 +25,22 @@ namespace BumpySellotape.Core.Traits.Controller
             return (trait != null);
         }
 
-        public bool AddTrait(TraitType traitType, uint stacks = 1)
+        public bool AddTrait(TraitType traitType, out Trait trait, uint stacks = 1)
         {
+            trait = null;
             if (GetTrait(traitType, out _))
                 return false;
-            Trait trait = new(traitType);
+            trait = new(traitType);
             trait.OnTraitStacksChanged += OnTraitStacksChanged;
             Traits.Add(trait);
             OnTraitAdded?.Invoke(trait);
+            Debug.Log($"Trait {traitType.name} added");
             return true;
+        }
+
+        public bool AddTrait(TraitType traitType, uint stacks = 1)
+        {
+            return AddTrait(traitType, out var _, stacks);
         }
 
         private void OnTraitStacksChanged(Trait trait)
@@ -57,7 +65,15 @@ namespace BumpySellotape.Core.Traits.Controller
 
         float IStatModifyingSystem.ModifyStatValue(StatType statType, StatVariable statVariable, float statValue)
         {
-            throw new System.NotImplementedException();
+            var modifiers = Traits
+                .SelectMany(t => t.TraitType.StatModifiers
+                    .Where(sm => sm.StatType == statType && sm.StatVariable == statVariable)
+                    .Select(sm => (t.Stacks, sm))
+                 );
+
+            float additive = modifiers.Where(m => m.sm.ModifierType == ModifierType.Additive).Sum(m => m.Stacks * m.sm.Value);
+            float multiplier = modifiers.Where(m => m.sm.ModifierType == ModifierType.Multiplicative).Aggregate(1f, (total, next) => total * Mathf.Pow(next.sm.Value, next.Stacks));
+            return statValue * multiplier + additive;
         }
 
         public void GenerateFromTemplate(TraitCollectionGenerationData traitCollectionGenerationData)
@@ -87,5 +103,10 @@ namespace BumpySellotape.Core.Traits.Controller
             return Traits.Where(t => t.HasModifierForStat(statType)).ToList();
         }
         */
+
+        public void OnAnyStatChanged(Stat stat)
+        {
+            stat.UpdateThresholdTraits(this);
+        }
     }
 }

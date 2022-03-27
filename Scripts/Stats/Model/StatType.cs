@@ -27,6 +27,7 @@ namespace BumpySellotape.Core.Stats.Model
         [field: SerializeField] public float HardMinValue { get; private set; } = 0f;
         [field: SerializeField] public float HardMaxValue { get; private set; } = 100f;
         [field: SerializeField] public List<StatChangeRelationship> StatChangeRelationships { get; private set; } = new ();
+        [field: SerializeField] public List<StatThresholdTrait> ThresholdTraits { get; private set; } = new ();
 
         public StatDisplayType DisplayType => displayType;
         public bool Hidden => displayType == StatDisplayType.Hidden;

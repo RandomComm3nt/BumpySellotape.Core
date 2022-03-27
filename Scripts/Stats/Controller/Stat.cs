@@ -1,6 +1,9 @@
 ﻿using BumpySellotape.Core.DateAndTime;
 using BumpySellotape.Core.Stats.Model;
+using BumpySellotape.Core.Traits.Controller;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace BumpySellotape.Core.Stats.Controller
@@ -25,6 +28,7 @@ namespace BumpySellotape.Core.Stats.Controller
         //private float baseDriftRatePerDay = 0f;
         private float gainMultiplier = 1f;
         private float lossMultiplier = 1f;
+        private List<Trait> thresholdTraits = new();
 
         public StatType StatType { get; }
         public StatCollection StatCollection { get; }
@@ -97,6 +101,30 @@ namespace BumpySellotape.Core.Stats.Controller
                 {
                     ChangeValue(StatCollection.GetStatSafe(scr.DeltaStat).Value * intervalCount);
                 }
+            }
+        }
+
+        public void UpdateThresholdTraits(TraitCollection traitCollection)
+        {
+            float v = Value;
+            var validTraitTypes = StatType.ThresholdTraits.Where(tt => tt.MinThreshold <= v && tt.MaxThreshold >= v).Select(tt => tt.TraitType).ToList();
+
+            // remove traits that are no longer valid
+            for (int i = 0; i < thresholdTraits.Count; i++)
+            {
+                if (!validTraitTypes.Contains(thresholdTraits[i].TraitType))
+                {
+                    traitCollection.RemoveTrait(thresholdTraits[i]);
+                    thresholdTraits.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            // apply new traits
+            foreach(var tt in validTraitTypes.Except(thresholdTraits.Select(t => t.TraitType)))
+            {
+                if (traitCollection.AddTrait(tt, out var newTrait))
+                    thresholdTraits.Add(newTrait);
             }
         }
 

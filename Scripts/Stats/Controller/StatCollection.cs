@@ -1,5 +1,6 @@
 ﻿using BumpySellotape.Core.DateAndTime;
 using BumpySellotape.Core.Stats.Model;
+using BumpySellotape.Core.Utilities;
 using Sirenix.Utilities;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,7 @@ namespace BumpySellotape.Core.Stats.Controller
 
         public List<Stat> AllStats => stats.Values.ToList();
 
-        public delegate void AnyStatChanged();
-        public event AnyStatChanged OnAnyStatChanged;
+        public event SimpleEventHandler<Stat> AnyStatChanged;
 
         public bool GetStat(StatType statType, out Stat stat)
         {
@@ -33,12 +33,12 @@ namespace BumpySellotape.Core.Stats.Controller
         public void GenerateFromTemplates(List<GeneratedStatTemplate> statTemplates)
         {
             stats = statTemplates.ToDictionary(t => t.StatType, t => t.Generate(this));
-            stats.Values.ForEach(s => s.OnValueChanged += StatChanged);
+            stats.Values.ForEach(s => s.OnValueChanged += (_) => OnStatChanged(s));
         }
 
-        private void StatChanged(float delta)
+        private void OnStatChanged(Stat stat)
         {
-            OnAnyStatChanged?.Invoke();
+            AnyStatChanged?.Invoke(stat);
         }
 
         public float GetDynamicStatValue(StatType statType)
