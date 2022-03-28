@@ -2,6 +2,8 @@
 {
     public class AlwaysTrueCondition : ICondition
     {
+        public string ConditionNotMetText => throw new System.NotImplementedException();
+
         string ICondition.Label => "Always";
 
         bool ICondition.Evaluate(EvaluationContext evaluationContext)

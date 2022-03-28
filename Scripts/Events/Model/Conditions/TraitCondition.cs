@@ -17,6 +17,8 @@ namespace BumpySellotape.Events.Model.Conditions
 
         public string Label => invertCondition ? "Does not have trait" : "Has trait";
 
+        public string ConditionNotMetText => Label;
+
         bool ICondition.Evaluate(EvaluationContext evaluationContext)
         {
             var traitCollection = evaluationContext.SystemLinks.GetSystemOrNull<TraitCollection>();

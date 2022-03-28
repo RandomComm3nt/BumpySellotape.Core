@@ -11,6 +11,8 @@ namespace BumpySellotape.Events.Model.Conditions
 
         public string Label => $"Period is {allowedPeriods}";
 
+        public string ConditionNotMetText => Label;
+
         bool ICondition.Evaluate(EvaluationContext evaluationContext)
         {
             var p = evaluationContext.SystemLinks.GetSystemSafe<DateAndPeriodTracker>().CurrentTimePeriod;

@@ -18,6 +18,8 @@ namespace BumpySellotape.Events.Model.Conditions
 
         public string Label => $"Group";
 
+        public string ConditionNotMetText => throw new System.NotImplementedException();
+
         public bool Evaluate(EvaluationContext evaluationContext)
         {
             return (groupType == GroupType.And)

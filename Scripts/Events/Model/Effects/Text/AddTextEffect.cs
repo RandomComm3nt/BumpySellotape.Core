@@ -1,5 +1,4 @@
 ﻿using BumpySellotape.Events.Controller;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace BumpySellotape.Events.Model.Effects.Text

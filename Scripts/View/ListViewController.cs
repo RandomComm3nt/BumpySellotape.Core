@@ -12,11 +12,13 @@ namespace BumpySellotape.Core.View
             : base(visualElement)
         {
         }
+
+        public abstract void OnItemClicked(object content);
     }
 
     public abstract class ListViewItemController<T>
     {
-        private ListViewController listViewController;
+        public ListViewController ListViewController { get; private set; }
 
         public T BoundItem { get; private set; }
         public VisualElement VisualElement{ get; private set; }
@@ -25,7 +27,7 @@ namespace BumpySellotape.Core.View
         {
             VisualElement = visualElement;
             visualElement.userData = this;
-            this.listViewController = listViewController;
+            ListViewController = listViewController;
             GetReferences();
         }
 
@@ -45,6 +47,7 @@ namespace BumpySellotape.Core.View
     {
         private readonly VisualTreeAsset listItemAsset;
         private readonly List<TContent> itemList;
+        public event SimpleEventHandler<TContent> ItemClicked;
         public event SimpleEventHandler<TContent> SelectionChangedSingle;
         public event SimpleEventHandler<IEnumerable<TContent>> SelectionChangedMultiple;
 
@@ -81,6 +84,11 @@ namespace BumpySellotape.Core.View
                 SelectionChangedSingle?.Invoke(obj.FirstOrDefault() as TContent);
             else
                 SelectionChangedMultiple?.Invoke(obj.Select(o => o as TContent));
+        }
+
+        public override void OnItemClicked(object content)
+        {
+            ItemClicked?.Invoke(content as TContent);
         }
     }
 }

@@ -5,6 +5,8 @@
         bool Evaluate(EvaluationContext evaluationContext);
 
         string Label { get; }
+
+        string ConditionNotMetText { get; }
     }
 
     public interface IScopeCondition : ICondition
