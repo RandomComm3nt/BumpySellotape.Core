@@ -61,6 +61,7 @@ namespace BumpySellotape.Core.View
             ListView.makeItem = MakeListItem;
             ListView.bindItem = BindListItem;
             ListView.itemsSource = itemList;
+            ListView.Rebuild();
             ListView.onSelectionChange += OnSelectionChange;
         }
 
