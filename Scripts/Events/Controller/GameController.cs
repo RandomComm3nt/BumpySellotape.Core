@@ -24,6 +24,7 @@ namespace BumpySellotape.Events.Controller
             if (EventManager == null)
                 Debug.LogError("An event manager should be initialise on the GameController prior to start");
             LoadScreenWithEvent(rootNode);
+            InputManager.SetInputHandler<CutsceneInputHandler, CutsceneManager>();
         }
 
         protected void LoadScreenWithEvent(EventNode node)
@@ -45,7 +46,6 @@ namespace BumpySellotape.Events.Controller
         public void EnterCutscene(EventNode sceneEvent, GameObject sceneObject)
         {
             StopScreen();
-            InputManager.SetInputHandler<CutsceneInputHandler, CutsceneManager>(cutsceneManager);// TECH DEBT - should clear input handler and set once loaded
             TransitionManager.DoTransition(
                 null,
                 () => StartScene(sceneEvent, sceneObject),
@@ -54,6 +54,7 @@ namespace BumpySellotape.Events.Controller
 
         public void ExitCutscene(EventNode gameEvent)
         {
+            InputManager.RemoveRequiredInputHandler(cutsceneManager);
             TransitionManager.DoTransition(
                 null,
                 () => LoadScreenWithEvent(gameEvent),
@@ -62,17 +63,11 @@ namespace BumpySellotape.Events.Controller
 
         private void StartScene(EventNode sceneEvent, GameObject sceneObject)
         {
+            InputManager.AddRequiredInputHandler(cutsceneManager, typeof(CutsceneInputHandler), cutsceneManager);
             cutsceneManager.StartCutscene(sceneObject);
             EventManager.SetSystemLink(typeof(IEventTextManager), cutsceneManager.EventTextManager);
             EventManager.SetSystemLink(typeof(IBackgroundRenderer), cutsceneManager);
             EventManager.ProcessEffect(sceneEvent);
-        }
-
-        private void Update()
-        {/*
-            if (Input.GetKeyDown(KeyCode.Space))
-                EventManager.AdvanceFrame();
-            */
         }
     }
 }

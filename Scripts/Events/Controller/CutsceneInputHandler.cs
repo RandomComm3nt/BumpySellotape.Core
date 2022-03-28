@@ -8,12 +8,12 @@ namespace BumpySellotape.Events.Controller
 
         public override string ActionMap => "Cutscene";
 
-        public override void Initialise(CutsceneManager controller)
+        protected override void Initialise(CutsceneManager controller)
         {
             this.controller = controller;
         }
 
-        public void OnAdvanceText()
+        private void OnAdvanceText()
         {
             controller.OnAdvanceText();
         }
