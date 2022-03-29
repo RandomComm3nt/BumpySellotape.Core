@@ -15,11 +15,13 @@ namespace BumpySellotape.Core.Events.Model.Nodes
             Frame,
             Node,
             None,
+            FrameList,
         }
 
         [SerializeField] private EffectSourceType effectSourceType = EffectSourceType.None;
         [SerializeField, ShowIf(nameof(effectSourceType), EffectSourceType.Effect)] private IEffect effect;
         [SerializeField, ShowIf(nameof(effectSourceType), EffectSourceType.Frame), HideLabel] private EventFrame eventFrame = new();
+        [SerializeField, ShowIf(nameof(effectSourceType), EffectSourceType.FrameList), HideLabel, HideReferenceObjectPicker] private EventFrameList eventFrameList = new();
         [SerializeField, ShowIf(nameof(effectSourceType), EffectSourceType.Node)] private EventNode eventNode;
 
         private IEffect Source =>
@@ -27,6 +29,7 @@ namespace BumpySellotape.Core.Events.Model.Nodes
             {
                 EffectSourceType.Effect => effect,
                 EffectSourceType.Frame => eventFrame,
+                EffectSourceType.FrameList => eventFrameList,
                 EffectSourceType.Node => eventNode,
                 EffectSourceType.None => null,
                 _ => throw new NotImplementedException(),

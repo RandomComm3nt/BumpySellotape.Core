@@ -1,5 +1,6 @@
 ﻿using BumpySellotape.Core.Events.Model.Nodes;
 using BumpySellotape.Events.Model.Effects;
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,7 +8,7 @@ namespace BumpySellotape.Core.Events.Model.Effects
 {
     public class MultiConditionEffect : IEffect
     {
-        [SerializeField] private List<ConditionOption> options = new();
+        [SerializeField, HideReferenceObjectPicker] private List<ConditionOption> options = new();
         [SerializeField] private EffectSource defaultEffect = new();
 
         public string Label => throw new System.NotImplementedException();
