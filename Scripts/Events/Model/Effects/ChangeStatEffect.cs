@@ -10,13 +10,13 @@ namespace BumpySellotape.Events.Model.Effects
 {
     public class ChangeStatEffect : IEffect
     {
-        [SerializeField, FoldoutGroup("@DisplayLabel")] private Target target;
-        [SerializeField, FoldoutGroup("@DisplayLabel")] private StatType statType;
+        [SerializeField, FoldoutGroup("@Label")] private Target target;
+        [SerializeField, FoldoutGroup("@Label")] private StatType statType;
 
-        [SerializeField, FoldoutGroup("@DisplayLabel"), ListDrawerSettings(CustomAddFunction = "GetDefaultFactor")] private List<CalculationFactor> additiveFactors = new List<CalculationFactor>();
-        [SerializeField, FoldoutGroup("@DisplayLabel"), ListDrawerSettings(CustomAddFunction = "GetDefaultFactor")] private List<CalculationFactor> multiplicativeFactors = new List<CalculationFactor>();
+        [SerializeField, FoldoutGroup("@Label"), ListDrawerSettings(CustomAddFunction = "GetDefaultFactor")] private List<CalculationFactor> additiveFactors = new();
+        [SerializeField, FoldoutGroup("@Label"), ListDrawerSettings(CustomAddFunction = "GetDefaultFactor")] private List<CalculationFactor> multiplicativeFactors = new();
 
-        string IEffect.Label => $"Change {(statType ? statType.DisplayName : "[stat]")} by [value]";
+        public string Label => $"Change {(statType ? statType.DisplayName : "[stat]")} by [value]";
 
         void IEffect.Process(ProcessingContext context)
         {
@@ -35,17 +35,13 @@ namespace BumpySellotape.Events.Model.Effects
 
         private List<StatCollection> GetTargetStatCollections(ProcessingContext context)
         {
-            switch (target)
+            return target switch
             {
-                case Target.Player:
-                    return new List<StatCollection>();
-                case Target.Self:
-                    return new List<StatCollection>();
-                case Target.Target1:
-                    return new List<StatCollection>();
-                default:
-                    return new List<StatCollection>();
-            }
+                Target.Player => new() { context.SystemLinks.GetSystemSafe<StatCollection>() },
+                Target.Self => new List<StatCollection>(),
+                Target.Target1 => new List<StatCollection>(),
+                _ => new List<StatCollection>(),
+            };
         }
 
         private CalculationFactor GetDefaultFactor => new CalculationFactor();

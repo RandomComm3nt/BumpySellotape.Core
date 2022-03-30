@@ -8,7 +8,7 @@ namespace BumpySellotape.Core.Events.Model.Effects
 {
     public class MultiConditionEffect : IEffect
     {
-        [SerializeField, HideReferenceObjectPicker] private List<ConditionOption> options = new();
+        [SerializeField, HideReferenceObjectPicker, ListDrawerSettings(CustomAddFunction = nameof(GetNewConditionOption))] private List<ConditionOption> options = new();
         [SerializeField] private EffectSource defaultEffect = new();
 
         public string Label => throw new System.NotImplementedException();
@@ -26,5 +26,7 @@ namespace BumpySellotape.Core.Events.Model.Effects
 
             defaultEffect.Process(processingContext);
         }
+
+        private ConditionOption GetNewConditionOption() => new();
     }
 }

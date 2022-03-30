@@ -11,6 +11,6 @@ namespace BumpySellotape.Core.Events.Model.Effects
         [field: SerializeField, FoldoutGroup("$" + nameof(Label)), HideLabel] public ICondition Condition { get; private set; }
         [field: SerializeField, FoldoutGroup("$" + nameof(Label)), HideLabel] public EffectSource Effect { get; private set; } = new();
 
-        private string Label => $"IF {Condition.Label} THEN {Effect.Label}";
+        private string Label => $"IF {Condition?.Label ?? "[Condition]"}";
     }
 }
