@@ -2,9 +2,11 @@
 using BumpySellotape.Core.Stats.Model;
 using BumpySellotape.Events.Model.Conditions;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-namespace CcgCore.Model.Effects
+namespace BumpySellotape.Core.Model.Effects
 {
     [HideReferenceObjectPicker]
     public class CalculationFactor
@@ -33,23 +35,27 @@ namespace CcgCore.Model.Effects
         public bool IsParamaterised => factorType == FactorType.Parameter;
         public string ParameterName => parameterName;
 
-        public float GetValue(EvaluationContext context, StatCollection statCollection, float defaultValue)
+        public string DisplayValue => factorType == FactorType.FixedValue ? value.ToString() : "X";
+
+        public virtual float GetValue(EvaluationContext context, StatCollection statCollection, float defaultValue)
         {
             return factorType switch
             {
                 FactorType.FixedValue => value,
                 FactorType.ValueRange => Random.Range(valueRange.x, valueRange.y),
-                //FactorType.Stat => GetStatValue(context.triggerActor.Actor, statCollection, defaultValue),
-                //FactorType.Parameter => context.parameters.FirstOrDefault(p => p.key == parameterName)?.GetValue(context, statCollection, defaultValue) ?? defaultValue,
+                FactorType.Stat => GetStatValue(statCollection, defaultValue),
+                FactorType.Parameter => context.parameters.FirstOrDefault(p => p.key == parameterName)?.GetValue(context, statCollection, defaultValue) ?? defaultValue,
                 _ => throw new System.NotImplementedException(),
             };
         }
 
-        private float GetStatValue(StatCollection thisActor, StatCollection targetActor, float defaultValue)
+        private float GetStatValue(StatCollection targetActor, float defaultValue)
         {
-            if (!(statOwner == MultiplierTarget.This ? thisActor : targetActor).GetStat(multiplierStatType, out var stat))
+            if (!targetActor.GetStat(multiplierStatType, out var stat))
                 return defaultValue;
             return stat.Value;
         }
+
+        public List<string> GetParameterNames() => IsParamaterised ? new() { parameterName } : new () ;
     }
 }

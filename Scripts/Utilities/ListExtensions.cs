@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BumpySellotape.Core.Utilities
 {
@@ -24,6 +25,17 @@ namespace BumpySellotape.Core.Utilities
             }
 
             return value;
+        }
+
+        public static List<T> Shuffle<T>(this List<T> list)
+        {
+            var newList = list.ToList();
+            for (int i = 0; i < newList.Count; i++)
+            {
+                int j = UnityEngine.Random.Range(i, newList.Count);
+                (newList[j], newList[i]) = (newList[i], newList[j]);
+            }
+            return newList;
         }
     }
 }

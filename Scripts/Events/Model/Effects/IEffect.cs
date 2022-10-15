@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace BumpySellotape.Events.Model.Effects
 {
     public interface IEffect
@@ -5,6 +7,8 @@ namespace BumpySellotape.Events.Model.Effects
         void Process(ProcessingContext processingContext);
 
         string Label { get; }
+
+        List<string> GetParameterNames() => new();
     }
 }
 

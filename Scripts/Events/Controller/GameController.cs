@@ -22,9 +22,9 @@ namespace BumpySellotape.Events.Controller
         public void Start()
         {
             if (EventManager == null)
-                Debug.LogError("An event manager should be initialise on the GameController prior to start");
+                Debug.LogError("An event manager should be initialised on the GameController prior to start");
             LoadScreenWithEvent(rootNode);
-            InputManager.SetInputHandler<CutsceneInputHandler, CutsceneManager>();
+           // InputManager.SetInputHandler<CutsceneInputHandler, CutsceneManager>();
         }
 
         protected void LoadScreenWithEvent(EventNode node)

@@ -16,7 +16,7 @@ namespace BumpySellotape.Core.Stats.View.Toolkit
 
             bar = new();
 
-            stat.OnValueChanged += UpdateValues;
+            stat.ValueChanged += UpdateValues;
             UpdateValues(0f);
         }
 

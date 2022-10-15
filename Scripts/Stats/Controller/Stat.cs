@@ -57,8 +57,8 @@ namespace BumpySellotape.Core.Stats.Controller
         //private float DriftRatePerDay => ModifyValue(baseDriftRatePerDay, StatVariable.DriftRate);
 
 
-        public delegate void ValueChanged(float delta);
-        public event ValueChanged OnValueChanged;
+        public delegate void ValueChangedHandler(float delta);
+        public event ValueChangedHandler ValueChanged;
 
         public Stat(StatType statType, StatCollection statCollection)
         {
@@ -76,7 +76,7 @@ namespace BumpySellotape.Core.Stats.Controller
             Debug.Log($"stat {StatType.name} changed by {delta}");
             delta *= (delta > 0 ? gainMultiplier : lossMultiplier);
             RawValue = Mathf.Clamp(RawValue + delta, RawMinValue, RawMaxValue);
-            OnValueChanged?.Invoke(delta);
+            ValueChanged?.Invoke(delta);
         }
 
         public void SetVariable(float value, StatVariable statVariable = StatVariable.Value)
@@ -90,7 +90,7 @@ namespace BumpySellotape.Core.Stats.Controller
                 //    driftTarget = value;
                 //    break;
             }
-            OnValueChanged?.Invoke(0f);
+            ValueChanged?.Invoke(0f);
         }
 
         internal void OnTimeIntervalAdvanced(TimeInterval timeInterval, int intervalCount)

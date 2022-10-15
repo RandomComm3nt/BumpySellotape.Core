@@ -33,7 +33,7 @@ namespace BumpySellotape.Core.Stats.Controller
         public void GenerateFromTemplates(List<GeneratedStatTemplate> statTemplates)
         {
             stats = statTemplates.ToDictionary(t => t.StatType, t => t.Generate(this));
-            stats.Values.ForEach(s => s.OnValueChanged += (_) => OnStatChanged(s));
+            stats.Values.ForEach(s => s.ValueChanged += (_) => OnStatChanged(s));
         }
 
         private void OnStatChanged(Stat stat)

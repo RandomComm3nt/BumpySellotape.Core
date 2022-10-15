@@ -1,23 +1,29 @@
 ﻿using BumpySellotape.Events.Controller;
 using BumpySellotape.Events.Model.Conditions;
 using BumpySellotape.Events.Model.Nodes;
+using System;
 using System.Collections.Generic;
 
 namespace BumpySellotape.Events.Model.Effects
 {
     public class ProcessingContext : EvaluationContext
     {
-        public bool isLoggingEnabled = false;
         public List<EventFrame> queuedFrames;
+        public List<IEffect> effectsToProcess;
 
         /// <summary>
         /// If set to true, no further effects will be run
         /// </summary>
         public bool cancelEvent = false;
+
         /// <summary>
         /// Set to true to notify the event trigger that the action should be cancelled
         /// </summary>
         public bool cancelEventTrigger = false;
+
+        public bool logDebugMessages = false;
+
+        public bool isWaitingToContinue = false;
 
         public bool HasQueuedFrames => queuedFrames?.Count > 0;
 
@@ -26,6 +32,21 @@ namespace BumpySellotape.Events.Model.Effects
         public ProcessingContext(GameController gameController)
         {
             GameController = gameController;
+        }
+
+        public void ProcessNextEffect()
+        {
+            isWaitingToContinue = false;
+
+            if (effectsToProcess.Count == 0 || cancelEvent)
+                return;
+
+            var effect = effectsToProcess[0];
+            effectsToProcess.RemoveAt(0);
+
+            effect.Process(this);
+            if (!isWaitingToContinue)
+                ProcessNextEffect();
         }
     }
 }

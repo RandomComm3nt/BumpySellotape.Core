@@ -18,14 +18,14 @@ namespace BumpySellotape.Core.Stats.View
         public virtual StatDisplay Initialise(Stat stat)
         {
             this.stat = stat;
-            stat.OnValueChanged += UpdateValues;
+            stat.ValueChanged += UpdateValues;
             UpdateValues();
             return this;
         }
 
         public void Destroy()
         {
-            stat.OnValueChanged -= UpdateValues;
+            stat.ValueChanged -= UpdateValues;
             Destroy(gameObject);
         }
 

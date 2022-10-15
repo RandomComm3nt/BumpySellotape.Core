@@ -1,6 +1,6 @@
-﻿using BumpySellotape.Core.Stats.Controller;
+﻿using BumpySellotape.Core.Model.Effects;
+using BumpySellotape.Core.Stats.Controller;
 using BumpySellotape.Core.Stats.Model;
-using CcgCore.Model.Effects;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +8,8 @@ using UnityEngine;
 
 namespace BumpySellotape.Events.Model.Effects
 {
-    public class ChangeStatEffect : IEffect
+    public abstract class ChangeStatEffectBase : IEffect
     {
-        [SerializeField, FoldoutGroup("@Label")] private Target target;
         [SerializeField, FoldoutGroup("@Label")] private StatType statType;
 
         [SerializeField, FoldoutGroup("@Label"), ListDrawerSettings(CustomAddFunction = "GetDefaultFactor")] private List<CalculationFactor> additiveFactors = new();
@@ -23,17 +22,36 @@ namespace BumpySellotape.Events.Model.Effects
             var targets = GetTargetStatCollections(context);
             foreach (var statCollection in targets)
             {
-                if (statCollection.GetStat(statType, out var stat))
-                {
-                    float additiveFactor = additiveFactors?.Sum(f => f.GetValue(context, statCollection, 0f)) ?? 0f;
-                    float multiplicativeFactor = multiplicativeFactors?.Select(f => f.GetValue(context, statCollection, 1f)).Aggregate(1f, (a, b) => a * b) ?? 1f;
-                    float value = additiveFactor * multiplicativeFactor;
-                    stat.ChangeValue(value);
-                }
+                ApplyStatChange(context, statCollection);
             }
         }
 
-        private List<StatCollection> GetTargetStatCollections(ProcessingContext context)
+        protected abstract List<StatCollection> GetTargetStatCollections(ProcessingContext context);
+
+        protected void ApplyStatChange(ProcessingContext context, StatCollection statCollection)
+        {
+            if (statCollection.GetStat(statType, out var stat))
+            {
+                float additiveFactor = additiveFactors?.Sum(f => f.GetValue(context, statCollection, 0f)) ?? 0f;
+                float multiplicativeFactor = multiplicativeFactors?.Select(f => f.GetValue(context, statCollection, 1f)).Aggregate(1f, (a, b) => a * b) ?? 1f;
+                float value = additiveFactor * multiplicativeFactor;
+                stat.ChangeValue(value);
+            }
+        }
+
+        private CalculationFactor GetDefaultFactor => new();
+
+        public List<string> GetParameterNames()
+        {
+            return additiveFactors.Union(multiplicativeFactors).Where(f => f.IsParamaterised).Select(f => f.ParameterName).ToList();
+        }
+    }
+
+    public class ChangeStatEffect : ChangeStatEffectBase, IEffect
+    {
+        [SerializeField, FoldoutGroup("@Label")] private Target target;
+
+        protected override List<StatCollection> GetTargetStatCollections(ProcessingContext context)
         {
             return target switch
             {
@@ -42,13 +60,6 @@ namespace BumpySellotape.Events.Model.Effects
                 Target.Target1 => new List<StatCollection>(),
                 _ => new List<StatCollection>(),
             };
-        }
-
-        private CalculationFactor GetDefaultFactor => new CalculationFactor();
-
-        public List<string> GetParameters()
-        {
-            return additiveFactors.Union(multiplicativeFactors).Where(f => f.IsParamaterised).Select(f => f.ParameterName).ToList();
         }
     }
 }
