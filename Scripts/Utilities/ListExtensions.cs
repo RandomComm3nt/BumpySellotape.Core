@@ -37,5 +37,11 @@ namespace BumpySellotape.Core.Utilities
             }
             return newList;
         }
+
+        public static IEnumerable<T2> FilterType<T, T2>(this IEnumerable<T> list)
+            where T2 : class
+        {
+            return list.Where(e => e is T2).Select(e => e as T2);
+        }
     }
 }
