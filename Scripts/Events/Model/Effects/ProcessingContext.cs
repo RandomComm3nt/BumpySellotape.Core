@@ -9,7 +9,7 @@ namespace BumpySellotape.Events.Model.Effects
     public class ProcessingContext : EvaluationContext
     {
         public List<EventFrame> queuedFrames;
-        public List<IEffect> effectsToProcess;
+        public List<IEffect> effectsToProcess = new ();
 
         /// <summary>
         /// If set to true, no further effects will be run
