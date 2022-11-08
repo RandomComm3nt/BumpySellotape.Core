@@ -1,4 +1,5 @@
 ﻿using BumpySellotape.Core.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UIElements;
@@ -46,10 +47,11 @@ namespace BumpySellotape.Core.View
         where TContent : class
     {
         private readonly VisualTreeAsset listItemAsset;
-        private readonly List<TContent> itemList;
+        private List<TContent> itemList;
         public event SimpleEventHandler<TContent> ItemClicked;
         public event SimpleEventHandler<TContent> SelectionChangedSingle;
         public event SimpleEventHandler<IEnumerable<TContent>> SelectionChangedMultiple;
+        public Action<TItem> setupAction;
 
         private ListView ListView => VisualElement as ListView;
 
@@ -71,6 +73,8 @@ namespace BumpySellotape.Core.View
             var newListEntryController = new TItem();
             newListEntryController.SetVisualElement(newListEntry, this);
 
+            setupAction?.Invoke(newListEntryController);
+
             return newListEntry;
         }
 
@@ -90,6 +94,13 @@ namespace BumpySellotape.Core.View
         public override void OnItemClicked(object content)
         {
             ItemClicked?.Invoke(content as TContent);
+        }
+
+        public void RefreshList(List<TContent> itemList)
+        {
+            this.itemList = itemList;
+            ListView.itemsSource = itemList;
+            ListView.Rebuild();
         }
     }
 }
