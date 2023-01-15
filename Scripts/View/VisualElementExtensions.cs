@@ -25,6 +25,11 @@ namespace BumpySellotape.Core.View
                 element.Hide();
         }
 
+        public static void ToggleVisible(this VisualElement element)
+        {
+            element.SetVisible(element.resolvedStyle.display == DisplayStyle.None);
+        }
+
         public static void Hide(this VisualElement element)
         {
             element.style.display = DisplayStyle.None;

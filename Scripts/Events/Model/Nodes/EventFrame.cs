@@ -16,7 +16,7 @@ namespace BumpySellotape.Events.Model.Nodes
 
         public void Process(ProcessingContext processingContext)
         {
-            eventBlocks.ForEach(eb => eb.Process(processingContext));
+            processingContext.effectsToProcess.InsertRange(0, eventBlocks);
         }
     }
 }

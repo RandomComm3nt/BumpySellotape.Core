@@ -1,8 +1,8 @@
 ﻿using BumpySellotape.Events.Controller;
 using BumpySellotape.Events.Model.Conditions;
 using BumpySellotape.Events.Model.Nodes;
-using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace BumpySellotape.Events.Model.Effects
 {
@@ -47,6 +47,12 @@ namespace BumpySellotape.Events.Model.Effects
             effect.Process(this);
             if (!isWaitingToContinue)
                 ProcessNextEffect();
+        }
+
+        public void Log(string message)
+        {
+            if (isLoggingEnabled)
+                Debug.Log(message);
         }
     }
 }

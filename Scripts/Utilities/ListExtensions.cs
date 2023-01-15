@@ -27,7 +27,7 @@ namespace BumpySellotape.Core.Utilities
             return value;
         }
 
-        public static List<T> Shuffle<T>(this List<T> list)
+        public static List<T> Shuffle<T>(this IEnumerable<T> list)
         {
             var newList = list.ToList();
             for (int i = 0; i < newList.Count; i++)
@@ -43,5 +43,7 @@ namespace BumpySellotape.Core.Utilities
         {
             return list.Where(e => e is T2).Select(e => e as T2);
         }
+
+        public static IEnumerable<(T1, T2)> CartesianJoin<T1, T2>(this IEnumerable<T1> list, IEnumerable<T2> list2) => list.Join(list2, x => 1, x => 1, (x, y) => (x, y));
     }
 }

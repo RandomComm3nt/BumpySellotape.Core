@@ -20,18 +20,15 @@ namespace BumpySellotape.Events.Model.Effects
 
         void IEffect.Process(ProcessingContext processingContext)
         {
-            if (processingContext.isLoggingEnabled)
-                Debug.Log($"Assessing {conditionList.Count} criteria for block \"{Label}\"");
+            processingContext.Log($"Assessing {conditionList.Count} criteria for block \"{Label}\"");
             if (conditionList.All(c => c.Evaluate(processingContext)))
             {
-                if (processingContext.isLoggingEnabled)
-                    Debug.Log($"Criteria met");
+                processingContext.Log($"Criteria met");
                 ifEffects.ForEach(b => b.Process(processingContext));
             }
             else
             {
-                if (processingContext.isLoggingEnabled)
-                    Debug.Log($"Criteria not met");
+                processingContext.Log($"Criteria not met");
                 elseEffects.ForEach(b => b.Process(processingContext));
             }
         }

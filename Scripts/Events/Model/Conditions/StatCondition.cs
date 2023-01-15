@@ -14,7 +14,12 @@ namespace BumpySellotape.Core.Events.Model.Conditions
 
         public bool Evaluate(EvaluationContext evaluationContext)
         {
-            var statValue = evaluationContext.SystemLinks.GetSystemSafe<StatCollection>().GetStatSafe(statType).Value;
+            return Evaluate(evaluationContext.SystemLinks.GetSystemSafe<StatCollection>());
+        }
+
+        public bool Evaluate(StatCollection statCollection)
+        {
+            var statValue = statCollection.GetStatSafe(statType).Value;
             return ComparisonUtility.CompareValue(statValue, comparisonOperator, value);
         }
 

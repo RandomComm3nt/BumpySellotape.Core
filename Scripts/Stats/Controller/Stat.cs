@@ -1,6 +1,7 @@
 ﻿using BumpySellotape.Core.DateAndTime;
 using BumpySellotape.Core.Stats.Model;
 using BumpySellotape.Core.Traits.Controller;
+using BumpySellotape.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,8 +63,8 @@ namespace BumpySellotape.Core.Stats.Controller
 
         public Stat(StatType statType, StatCollection statCollection)
         {
-            StatType = statType;
-            StatCollection = statCollection;
+            StatType = statType ? statType : throw new ArgumentNullException(nameof(statType));
+            StatCollection = statCollection ?? throw new ArgumentNullException(nameof(statCollection));
             RawValue = statType.DefaultValue;
             RawMinValue = statType.DefaultMinValue;
             RawMaxValue = statType.DefaultMaxValue;
